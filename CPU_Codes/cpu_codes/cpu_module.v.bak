@@ -1,0 +1,199 @@
+// Copyright (C) 2020  Intel Corporation. All rights reserved.
+// Your use of Intel Corporation's design tools, logic functions 
+// and other software and tools, and any partner logic 
+// functions, and any output files from any of the foregoing 
+// (including device programming or simulation files), and any 
+// associated documentation or information are expressly subject 
+// to the terms and conditions of the Intel Program License 
+// Subscription Agreement, the Intel Quartus Prime License Agreement,
+// the Intel FPGA IP License Agreement, or other applicable license
+// agreement, including, without limitation, that your use is for
+// the sole purpose of programming logic devices manufactured by
+// Intel and sold by Intel or its authorized distributors.  Please
+// refer to the applicable agreement for further details, at
+// https://fpgasoftware.intel.com/eula.
+
+// PROGRAM		"Quartus Prime"
+// VERSION		"Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition"
+// CREATED		"Mon Feb 12 21:45:45 2024"
+
+module cpu_module(
+	clk,
+	rx,
+	node_update,
+	echo,
+	ultra_reset,
+	cpu_done,
+	right_en,
+	left_en,
+	forwar_en,
+	reverse_en,
+	prev_right,
+	prev_left,
+	prev_forward,
+	prev_reverse,
+	trigger,
+	ultra_out,
+	i_fault,
+	p_block,
+	b_drop,
+	future_node,
+	past_node,
+	present_node
+);
+
+
+input wire	clk;
+input wire	rx;
+input wire	node_update;
+input wire	echo;
+input wire	ultra_reset;
+output wire	cpu_done;
+output wire	right_en;
+output wire	left_en;
+output wire	forwar_en;
+output wire	reverse_en;
+output wire	prev_right;
+output wire	prev_left;
+output wire	prev_forward;
+output wire	prev_reverse;
+output wire	trigger;
+output wire	ultra_out;
+output wire	i_fault;
+output wire	p_block;
+output wire	b_drop;
+output wire	[4:0] future_node;
+output wire	[4:0] past_node;
+output wire	[4:0] present_node;
+
+wire	SYNTHESIZED_WIRE_25;
+wire	SYNTHESIZED_WIRE_2;
+wire	SYNTHESIZED_WIRE_3;
+wire	SYNTHESIZED_WIRE_4;
+wire	[4:0] SYNTHESIZED_WIRE_5;
+wire	[1:0] SYNTHESIZED_WIRE_6;
+wire	[1:0] SYNTHESIZED_WIRE_7;
+wire	SYNTHESIZED_WIRE_26;
+wire	SYNTHESIZED_WIRE_10;
+wire	[31:0] SYNTHESIZED_WIRE_11;
+wire	[31:0] SYNTHESIZED_WIRE_12;
+wire	SYNTHESIZED_WIRE_14;
+wire	[4:0] SYNTHESIZED_WIRE_15;
+wire	[4:0] SYNTHESIZED_WIRE_16;
+wire	SYNTHESIZED_WIRE_18;
+wire	SYNTHESIZED_WIRE_20;
+wire	SYNTHESIZED_WIRE_21;
+wire	SYNTHESIZED_WIRE_22;
+wire	[31:0] SYNTHESIZED_WIRE_23;
+wire	[31:0] SYNTHESIZED_WIRE_24;
+
+assign	ultra_out = SYNTHESIZED_WIRE_2;
+assign	i_fault = SYNTHESIZED_WIRE_20;
+assign	p_block = SYNTHESIZED_WIRE_21;
+assign	b_drop = SYNTHESIZED_WIRE_22;
+assign	future_node = SYNTHESIZED_WIRE_16;
+assign	present_node = SYNTHESIZED_WIRE_5;
+
+
+
+
+ultrasonic	b2v_inst10(
+	.clk_50M(SYNTHESIZED_WIRE_25),
+	.reset(ultra_reset),
+	.echo_rx(echo),
+	.trigger(trigger),
+	.out(SYNTHESIZED_WIRE_2)
+	
+	);
+	defparam	b2v_inst10.read_input = 2'b10;
+	defparam	b2v_inst10.trigger_pulse = 2'b01;
+	defparam	b2v_inst10.warm_up = 2'b00;
+
+
+bot_states	b2v_inst2(
+	.clk(SYNTHESIZED_WIRE_25),
+	.en(SYNTHESIZED_WIRE_2),
+	.unit_msg(SYNTHESIZED_WIRE_3),
+	.pbm_complete(SYNTHESIZED_WIRE_4),
+	.present_node(SYNTHESIZED_WIRE_5),
+	.su(SYNTHESIZED_WIRE_6),
+	.unit_pulse(SYNTHESIZED_WIRE_7),
+	.cpu_en(SYNTHESIZED_WIRE_14),
+	.i_fault(SYNTHESIZED_WIRE_20),
+	.p_block(SYNTHESIZED_WIRE_21),
+	.b_drop(SYNTHESIZED_WIRE_22),
+	.EP(SYNTHESIZED_WIRE_15)
+	
+	
+	
+	);
+	defparam	b2v_inst2.BLOCK_DROP = 2'b10;
+	defparam	b2v_inst2.IDENTIFY_FAULT = 2'b00;
+	defparam	b2v_inst2.PICK_BLOCK = 2'b01;
+
+
+t2b_riscv_cpu	b2v_inst3(
+	.clk(SYNTHESIZED_WIRE_25),
+	.reset(SYNTHESIZED_WIRE_26),
+	.Ext_MemWrite(SYNTHESIZED_WIRE_10),
+	.Ext_DataAdr(SYNTHESIZED_WIRE_11),
+	.Ext_WriteData(SYNTHESIZED_WIRE_12),
+	.MemWrite(SYNTHESIZED_WIRE_18),
+	.DataAdr(SYNTHESIZED_WIRE_23),
+	.WriteData(SYNTHESIZED_WIRE_24));
+
+
+cpu_starter	b2v_inst4(
+	.clk(SYNTHESIZED_WIRE_25),
+	.cpu_en(SYNTHESIZED_WIRE_14),
+	.EP(SYNTHESIZED_WIRE_15),
+	.future_node(SYNTHESIZED_WIRE_16),
+	.reset(SYNTHESIZED_WIRE_26),
+	.Ext_MemWrite(SYNTHESIZED_WIRE_10),
+	.Ext_DataAdr(SYNTHESIZED_WIRE_11),
+	.Ext_WriteData(SYNTHESIZED_WIRE_12));
+
+
+Frequency_Scaling	b2v_inst5(
+	.clk_50M(clk),
+	.adc_clk_out(SYNTHESIZED_WIRE_25));
+
+
+rx_test	b2v_inst6(
+	.clk(clk),
+	.rx(rx),
+	.unit_msg(SYNTHESIZED_WIRE_3),
+	.pbm_complete(SYNTHESIZED_WIRE_4),
+	.su(SYNTHESIZED_WIRE_6),
+	.unit_pulse(SYNTHESIZED_WIRE_7));
+	defparam	b2v_inst6.DATA_BITS = 2;
+	defparam	b2v_inst6.IDLE = 0;
+	defparam	b2v_inst6.START_BIT = 1;
+	defparam	b2v_inst6.STOP = 3;
+
+
+sampler	b2v_inst9(
+	.clk(SYNTHESIZED_WIRE_25),
+	.MemWrite(SYNTHESIZED_WIRE_18),
+	.reset(SYNTHESIZED_WIRE_26),
+	.node_update(node_update),
+	.i_fault(SYNTHESIZED_WIRE_20),
+	.p_block(SYNTHESIZED_WIRE_21),
+	.b_drop(SYNTHESIZED_WIRE_22),
+	.DataAdr(SYNTHESIZED_WIRE_23),
+	.WriteData(SYNTHESIZED_WIRE_24),
+	.cpu_done(cpu_done),
+	.right_en(right_en),
+	.left_en(left_en),
+	.forward_en(forwar_en),
+	.reverse_en(reverse_en),
+	.prev_right_en(prev_right),
+	.prev_left_en(prev_left),
+	.prev_forward_en(prev_forward),
+	.prev_reverse_en(prev_reverse),
+	.future_node(SYNTHESIZED_WIRE_16),
+	.past_node(past_node),
+	.present_node(SYNTHESIZED_WIRE_5));
+
+
+endmodule
